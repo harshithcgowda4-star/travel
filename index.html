@@ -1,215 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Travel Explorer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <!-- GSAP CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <style>
-    :root {
-      --primary: #2266ff;
-      --secondary: #ff92bc;
-      --accent: #ffdd59;
-      --background: #f2f6fb;
-      --cardBg: #fff8f6;
-      --headerBg: linear-gradient(90deg,#2266ff 60%,#ff92bc);
-      --gradient: linear-gradient(135deg,#2266ff 60%,#ff92bc 95%);
-    }
-    /* -- Graphics & Decorations -- */
-    body {
-      background: var(--background);
-      color: #222;
-      font-family: 'Poppins', sans-serif;
-      overflow-x: hidden;
-    }
-    .abstract-bg {
-      position: fixed;
-      left:0; top:0; width:100vw; height:100vh; z-index:-1;
-      pointer-events:none;
-    }
-    .svg-blobs {position:absolute;top:0;left:0;z-index:-1;}
-    /* Navbar */
-    header {
-      position: sticky; top: 0; z-index: 1000;
-      background: var(--headerBg); box-shadow: 0 6px 24px rgba(34,102,255,0.18);
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 60px; min-height: 70px;
-    }
-    .logo {display:flex;align-items:center;gap:16px;}
-    .logo img {width:48px;height:48px;box-shadow:0 2px 9px rgba(34,102,255,0.2);}
-    .logo h1 {font-size:2rem;font-weight:700;color:var(--accent);letter-spacing:1.5px;}
-    nav {display:flex;gap:36px;}
-    nav a {
-      color: #fff; text-decoration: none; font-weight:500; font-size:1.1rem; position:relative;
-      transition:color 0.2s,letter-spacing 0.2s;
-      letter-spacing:0.5px;
-      padding:7px 10px;
-    }
-    nav a:hover {
-      color: var(--accent); letter-spacing:2px;
-      background:rgba(255,221,89,0.2);
-      border-radius:20px;
-    }
-    /* Hero */
-    #home {
-      height:96vh;
-      min-height:560px;
-      background:
-        linear-gradient(90deg,rgba(34,102,255,0.85) 25%,rgba(255,146,188,0.65) 100%);
-      color: #fff;
-      display: flex; flex-direction:column;
-      justify-content:center;align-items:center;
-      padding: 32px 16px; text-align:center;
-      position: relative; overflow:hidden;
-    }
-    #home h2 {
-      font-size:3rem; margin-bottom:18px;
-      font-weight:700; letter-spacing:2px;
-      text-shadow: 0 6px 32px rgba(34,102,255,0.18);
-    }
-    #home p {
-      font-size:1.25rem; margin-bottom:40px; max-width:540px; margin-left:auto; margin-right:auto;
-      text-shadow:2px 2px 16px rgba(20,20,46,0.10);
-    }
-    #home button {
-      padding:16px 36px; border:none; border-radius:40px;
-      font-size:1.2rem; font-weight:700;
-      background: linear-gradient(90deg,#ffdd59,#ff92bc);
-      color:#2266ff; cursor:pointer;
-      box-shadow:0 4px 14px rgba(255,146,188,0.18);
-      transition:transform 0.25s,box-shadow 0.25s,background 0.3s;
-      position:relative; overflow:hidden;
-    }
-    #home button:active {
-      background: linear-gradient(90deg,#ff92bc,#ffdd59);
-      transform:scale(0.98);
-    }
-    #home::after {
-      content:"";
-      position:absolute;bottom:-64px;left:-48px;width:640px;height:196px;
-      background:var(--gradient);
-      filter:blur(80px);
-      opacity:0.2;
-      z-index:0;
-    }
-    /* Explore */
-    #explore {
-      padding:90px 16px 56px 16px; text-align:center;
-      background:linear-gradient(90deg,#f2f6fb 70%,#ff92bc22 100%);
-      min-height:150px;
-      position: relative;
-    }
-    #explore h2 {font-size:2.2rem;margin-bottom:22px;color:#2266ff;}
-    .search-box {
-      display:inline-flex;gap:10px;align-items:center;justify-content:center;background:var(--cardBg);
-      padding:9px 16px;border-radius:36px;box-shadow:0 2px 8px rgba(255,221,89,0.05);
-      margin-bottom:6px;
-    }
-    #destinationInput {
-      padding:14px 23px;width:300px;border-radius:30px;
-      border:2px solid #ff92bc;font-size:1.08rem;outline:none;
-      box-shadow:0 1px 8px rgba(34,102,255,0.05);background:#fff7fa;
-      transition:box-shadow 0.3s,border-color 0.3s;
-    }
-    #destinationInput:focus {box-shadow:0 6px 18px 0px #ff92bc44;border-color:var(--accent);}
-    #searchBtn {
-      padding:13px 30px; font-size:1.08rem;background:var(--primary);
-      color:#fff; border:none;border-radius:30px; font-weight:600; cursor:pointer;
-      transition:transform 0.3s,background 0.3s;
-      position:relative; overflow:hidden;
-      box-shadow:0 2px 10px #2266ff33;
-    }
-    #searchBtn:active {background:var(--secondary);}
-    #searchBtn:hover {transform:scale(1.06);background:var(--secondary);}
-    /* Results */
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Travel Explorer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  :root {
+    --primary-blue: #1e3a8a;
+    --soft-blue: #dbeafe;
+    --accent-yellow: #facc15;
+    --background-light: #f9fafb;
+    --text-dark: #1e293b;
+    --card-bg: #ffffff;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--background-light);
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--primary-blue);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 40px;
+    box-shadow: 0 2px 8px var(--shadow-light);
+  }
+  /* Logo container */
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  /* Unique globe + airplane logo */
+  svg.logo-svg {
+    width: 70px;
+    height: 70px;
+    transition: transform 0.4s ease;
+  }
+  .logo:hover svg.logo-svg {
+    transform: rotate(-8deg) scale(1.1);
+  }
+  .logo-text {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #fff;
+    user-select: none;
+  }
+  nav {
+    display: flex;
+    gap: 28px;
+  }
+  nav a {
+    color: #e0e7ff;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+  }
+  nav a:hover,
+  nav a:focus {
+    background-color: var(--accent-yellow);
+    color: var(--primary-blue);
+    outline: none;
+  }
+  /* Hero */
+  #home {
+    height: 90vh;
+    background: linear-gradient(135deg, var(--soft-blue), #93c5fd);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  #home h2 {
+    font-size: 3.2rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--primary-blue);
+  }
+  #home p {
+    font-size: 1.25rem;
+    color: #334155;
+    max-width: 520px;
+    margin-bottom: 40px;
+  }
+  #home button {
+    background: var(--accent-yellow);
+    border: none;
+    border-radius: 30px;
+    padding: 15px 48px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--primary-blue);
+    box-shadow: 0 4px 12px rgba(250, 204, 21, 0.6);
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  #home button:hover,
+  #home button:focus {
+    background: #eab308;
+    transform: scale(1.08);
+    outline: none;
+  }
+  /* Explore */
+  #explore {
+    padding: 80px 20px;
+    text-align: center;
+  }
+  #explore h2 {
+    font-size: 2.2rem;
+    margin-bottom: 28px;
+    color: var(--primary-blue);
+  }
+  .search-box {
+    display: inline-flex;
+    gap: 14px;
+    align-items: center;
+    background: var(--card-bg);
+    padding: 14px 26px;
+    border: 2px solid var(--soft-blue);
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgb(59 130 246 / 0.2);
+    max-width: 460px;
+    width: 90%;
+    transition: border-color 0.4s;
+  }
+  .search-box:focus-within {
+    border-color: var(--accent-yellow);
+    box-shadow: 0 6px 20px rgb(250 204 21 / 0.6);
+  }
+  #destinationInput {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: var(--primary-blue);
+    background: transparent;
+    padding: 12px 12px 12px 0;
+    font-weight: 600;
+  }
+  #destinationInput::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+  }
+  #searchBtn {
+    background: var(--primary-blue);
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 50px;
+    font-weight: 600;
+    padding: 12px 32px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgb(30 58 138 / 0.5);
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  #searchBtn:hover,
+  #searchBtn:focus {
+    background: #1e40af;
+    transform: scale(1.05);
+    outline: none;
+  }
+  /* Results */
+  #results {
+    max-width: 1200px;
+    margin: 64px auto 80px auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 36px;
+    padding: 0 20px;
+  }
+  #photos,
+  #weather {
+    background: var(--card-bg);
+    border-radius: 24px;
+    box-shadow: 0 5px 20px var(--shadow-light);
+    padding: 28px 24px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #photos.visible,
+  #weather.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #photos h2,
+  #weather h2 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-blue);
+    margin-bottom: 24px;
+  }
+  #photoGallery {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 20px;
+  }
+  #photoGallery img {
+    border-radius: 16px;
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    box-shadow: 0 6px 24px rgb(30 58 138 / 0.2);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  #photoGallery img.visible {
+    opacity: 1;
+  }
+  #weatherInfo h3 {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--primary-blue);
+    margin-bottom: 14px;
+  }
+  #weatherInfo p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #334155;
+  }
+  /* About & Contact */
+  #about,
+  #contact {
+    max-width: 800px;
+    margin: 40px auto 48px auto;
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 60px 40px;
+    box-shadow: 0 5px 22px var(--shadow-light);
+    color: var(--primary-blue);
+  }
+  #about h2,
+  #contact h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+  }
+  #about p,
+  #contact p {
+    font-size: 1.15rem;
+    line-height: 1.7;
+  }
+  /* Footer */
+  footer {
+    background: var(--primary-blue);
+    color: #e0e7ff;
+    text-align: center;
+    padding: 22px 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+  /* Responsive */
+  @media (max-width: 960px) {
     #results {
-      padding:64px 24px 90px 24px;
-      display:grid; grid-template-columns:2.2fr 1fr; gap:34px;
-      background:linear-gradient(105deg,#fff8f6 90%,#2266ff22 100%);
-      position:relative; z-index:2;
+      grid-template-columns: 1fr;
+      padding: 0 15px;
     }
-    .decorative-planes {
-      position:absolute; right:20px; bottom:-30px; width:210px; height:110px; opacity:0.24; z-index:0;
-      pointer-events:none;
+    #photos,
+    #weather {
+      margin-bottom: 26px;
     }
-    #photos, #weather {
-      background:var(--cardBg);box-shadow:0 6px 24px rgba(34,102,255,0.065);
-      padding:27px 24px;border-radius:17px; min-height:250px;
-      transition:transform 0.3s, box-shadow 0.3s;
-      position:relative; z-index:2;
-      border:1.2px solid #ff92bc33;
-      display:flex; flex-direction:column; align-items:center;
-      opacity: 0; transform: translateY(40px);
-      margin-bottom:10px;
+  }
+  @media (max-width: 480px) {
+    #home h2 {
+      font-size: 2.1rem;
     }
-    #photos:hover, #weather:hover {
-      transform:translateY(-6px) scale(1.03); box-shadow:0 12px 32px rgba(34,102,255,0.07);
-      border-color:var(--accent);
+    #explore h2 {
+      font-size: 1.6rem;
     }
-    #photos h2, #weather h2 {
-      color: var(--primary); margin-bottom:15px; font-size:1.4rem;
-      letter-spacing:2px; font-weight:600;
+    #about,
+    #contact {
+      padding: 40px 20px;
     }
-    #photoGallery {
-      display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
-      gap:17px; margin-top:23px; width:100%;
-    }
-    #photoGallery img {
-      width:100%; height:170px; border-radius:15px;object-fit:cover;
-      box-shadow:0 2px 14px rgba(246,50,77,0.11);
-      transition:transform 0.3s,box-shadow 0.3s,opacity 0.7s;
-      opacity:0;
-      background:var(--secondary);
-      border:3px solid #fff7fa;
-    }
-    #weatherInfo h3 {color:#2266ff;margin-bottom:13px;font-size:1.17rem;}
-    #weatherInfo p {font-size:1.09rem;margin-bottom:9px;color:#514c6a;}
-    /* About / Contact cards */
-    #about, #contact {
-      padding:82px 15px; text-align:center;
-      background:var(--gradient); color:#fff;
-      min-height:260px; position:relative;
-      border-radius:20px; box-shadow:0 4px 18px #2266ff14;
-      margin:44px 0 12px 0;
-      opacity:0; transform:translateY(50px);
-    }
-    #about h2, #contact h2 {font-size:2.3rem;margin-bottom:24px;color:var(--accent);font-weight:600;}
-    #about p, #contact p {font-size:1.15rem;max-width:660px;margin:auto; line-height:1.7; margin-bottom:12px;}
-    /* Footer */
-    footer { text-align:center;padding:27px 0;background:var(--primary);color:#fff;letter-spacing:2px;font-size:1rem;}
-    /* Graphics - Responsive */
-    @media (max-width:1080px){
-      #results{grid-template-columns:1fr;}
-      .decorative-planes{display:none;}
-      header{padding:14px 14px;}
-    }
-    @media (max-width:730px){
-      #home h2{font-size:2.1rem;}
-      #photos, #weather, #about, #contact{padding:17px 7px;}
-      body{font-size:0.98rem;}
-      #destinationInput{width:170px;}
-      nav{gap:16px;}
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <!-- Abstract SVG Decorations -->
-  <div class="abstract-bg">
-    <svg class="svg-blobs" width="800" height="490">
-      <ellipse cx="170" cy="120" rx="130" ry="85" fill="#ff92bc" opacity="0.16"/>
-      <ellipse cx="680" cy="420" rx="160" ry="90" fill="#2266ff" opacity="0.12"/>
-      <ellipse cx="600" cy="190" rx="60" ry="40" fill="#ffdd59" opacity="0.10"/>
-    </svg>
-  </div>
   <!-- Navbar -->
-  <header>
-    <div class="logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/854/854894.png" alt="logo">
-      <h1>Travel Explorer</h1>
+  <header role="banner">
+    <div class="logo" tabindex="0" aria-label="Travel Explorer Logo | Home Link" role="link"
+         onclick="window.scrollTo({top:0,behavior:'smooth'})"
+         onkeypress="if(event.key==='Enter'){window.scrollTo({top:0,behavior:'smooth'})}">
+      
+      <!-- Unique Logo SVG -->
+      <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-labelledby="logoTitle logoDesc" role="img">
+        <title id="logoTitle">Travel Explorer Logo</title>
+        <desc id="logoDesc">A globe with an airplane flying across it</desc>
+        
+        <!-- Globe -->
+        <circle cx="50" cy="50" r="45" stroke="#facc15" stroke-width="5" fill="none"/>
+        <path d="M50 5 A45 45 0 0 1 95 50 A45 45 0 0 1 50 95 A45 45 0 0 1 5 50 A45 45 0 0 1 50 5Z"
+              stroke="#facc15" stroke-width="2" fill="none" stroke-dasharray="8,6"/>
+        
+        <!-- Airplane -->
+        <path d="M70 40 L90 30 L80 50 L90 60 L65 48 Z"
+              fill="#facc15" stroke="#1e3a8a" stroke-width="2"/>
+      </svg>
+      
+      <span class="logo-text">Travel Explorer</span>
     </div>
-    <nav>
+    <nav role="navigation" aria-label="Primary">
       <a href="#home">Home</a>
       <a href="#explore">Explore</a>
       <a href="#about">About</a>
@@ -217,26 +331,26 @@
     </nav>
   </header>
   <!-- Hero -->
-  <section id="home">
-    <h2>Discover Your Next Adventure ✈</h2>
+  <section id="home" role="region" aria-labelledby="heroTitle" tabindex="-1">
+    <h2 id="heroTitle">Discover Your Next Adventure ✈</h2>
     <p>
-      Explore the world’s most beautiful places with breathtaking images, playful graphics, and live weather. 
-      Streamline your dream trip—every destination is just one search away!
+      Explore the world’s most beautiful places with breathtaking images,
+      live weather updates, and easy trip planning.
     </p>
-    <button onclick="document.getElementById('explore').scrollIntoView({behavior:'smooth'})">
+    <button id="startExplore" aria-label="Scroll to Explore section" onclick="document.getElementById('explore').scrollIntoView({behavior:'smooth'})">
       Start Exploring
     </button>
   </section>
   <!-- Explore -->
-  <section id="explore">
-    <h2>Explore Destinations</h2>
+  <section id="explore" role="region" aria-labelledby="exploreTitle" tabindex="-1">
+    <h2 id="exploreTitle">Explore Destinations</h2>
     <div class="search-box">
-      <input type="text" id="destinationInput" placeholder="Enter a city or country...">
-      <button id="searchBtn">Search</button>
+      <input type="text" id="destinationInput" placeholder="Enter a city or country..." aria-label="Destination input" />
+      <button id="searchBtn" aria-label="Search destinations">Search</button>
     </div>
   </section>
   <!-- Results -->
-  <section id="results">
+  <section id="results" aria-live="polite" aria-atomic="true">
     <div id="photos">
       <h2>Photos</h2>
       <div id="photoGallery"></div>
@@ -245,26 +359,18 @@
       <h2>Weather</h2>
       <div id="weatherInfo"></div>
     </div>
-    <svg class="decorative-planes" viewBox="0 0 210 110">
-      <circle cx="30" cy="70" r="26" fill="#ffdd59"/>
-      <rect x="50" y="10" width="70" height="38" rx="20" fill="#ff92bc"/>
-      <rect x="130" y="58" width="65" height="32" rx="16" fill="#2266ff"/>
-      <!-- Iconic Travel Plane -->
-      <polygon points="140,100 190,80 185,90" fill="white" opacity="0.5"/>
-      <rect x="165" y="99" width="24" height="7" rx="4" fill="#ffdd59"/>
-    </svg>
   </section>
   <!-- About -->
-  <section id="about">
-    <h2>About Travel Explorer</h2>
+  <section id="about" role="region" aria-labelledby="aboutTitle" tabindex="-1">
+    <h2 id="aboutTitle">About Travel Explorer</h2>
     <p>
-      Travel Explorer is your modern travel companion—bringing together vibrant inspiration, curated images, live updates, and creative visuals. 
-      Designed for wanderers, dreamers, and planners, it’s a cheerful gateway to your next great experience.
+      Travel Explorer makes trip planning effortless and fun. Discover beautiful destinations,
+      see live updates, and plan smart trips—all in one place.
     </p>
   </section>
   <!-- Contact -->
-  <section id="contact">
-    <h2>Contact Us</h2>
+  <section id="contact" role="region" aria-labelledby="contactTitle" tabindex="-1">
+    <h2 id="contactTitle">Contact Us</h2>
     <p>📞 Phone: +91 98765 43210</p>
     <p>📧 Email: info@travelexplorer.com</p>
     <p>📍 Address: Bangalore, India</p>
@@ -273,93 +379,90 @@
   <footer>
     <p>© 2025 Travel Explorer | Designed by You</p>
   </footer>
-  <!-- JS: Animations & Interactions -->
-  <script>
-    window.addEventListener('DOMContentLoaded',()=>{
-      // Entrance anims for sections/cards
-      gsap.to("#home", {opacity:1, y:0, duration:0.9, ease:"power2.out"});
-      gsap.to("#explore", {opacity:1, y:0, delay:0.15, duration:0.85});
-      gsap.to("#results > div", {opacity:1, y:0, delay:0.36, duration:0.85, stagger:0.12});
-      gsap.to("#about", {opacity:1, y:0, delay:0.55, duration:0.90});
-      gsap.to("#contact", {opacity:1, y:0, delay:0.70, duration:0.85});
-    });
-    // Scroll-triggered fade for all major sections
-    document.querySelectorAll('section').forEach(section=>{
-      let observer=new IntersectionObserver(entries=>{
-        entries.forEach(entry=>{
-          if(entry.isIntersecting){
-            gsap.to(entry.target,{opacity:1,y:0,duration:0.8,ease:"power2.out"});
-            observer.unobserve(entry.target);
-          }
-        });
-      },{threshold:0.2});
-      observer.observe(section);
-    });
 
-    // Search & result animations
-    const searchBtn=document.getElementById('searchBtn');
-    const destinationInput=document.getElementById('destinationInput');
-    const photoGallery=document.getElementById('photoGallery');
-    const weatherInfo=document.getElementById('weatherInfo');
-    const UNSPLASH_ACCESS_KEY="vCZFF3bfPi7kGjWNwQqzxkxx6Vq4X04hzeBx2CbwDIE";
-    const WEATHER_API_KEY="5157c631dfe518483617d2a4883ec39f";
-    searchBtn.addEventListener('click',()=>{
-      const destination=destinationInput.value.trim();
-      if(destination){
-        fetchPhotos(destination);
-        fetchWeather(destination);
+<script>
+  // GSAP animations on page load and scroll revealed sections
+  window.addEventListener('DOMContentLoaded', () => {
+    gsap.to('#home', { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' });
+    gsap.to('#explore', { opacity: 1, y: 0, delay: 0.15, duration: 0.85 });
+    gsap.to('#results > div', { opacity: 1, y: 0, delay: 0.36, duration: 0.85, stagger: 0.1 });
+    gsap.to('#about', { opacity: 1, y: 0, delay: 0.6, duration: 0.85 });
+    gsap.to('#contact', { opacity: 1, y: 0, delay: 0.8, duration: 0.85 });
+  });
+
+  document.querySelectorAll('section').forEach(section => {
+    let observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.15});
+    observer.observe(section);
+  });
+
+  const searchBtn = document.getElementById('searchBtn');
+  const destinationInput = document.getElementById('destinationInput');
+  const photoGallery = document.getElementById('photoGallery');
+  const weatherInfo = document.getElementById('weatherInfo');
+  const UNSPLASH_ACCESS_KEY = "vCZFF3bfPi7kGjWNwQqzxkxx6Vq4X04hzeBx2CbwDIE";
+  const WEATHER_API_KEY = "5157c631dfe518483617d2a4883ec39f";
+  searchBtn.addEventListener('click', () => {
+    const destination = destinationInput.value.trim();
+    if(destination) {
+      fetchPhotos(destination);
+      fetchWeather(destination);
+    } else {
+      alert("Please enter a city or country!");
+    }
+  });
+  function fetchPhotos(destination) {
+    photoGallery.innerHTML = "<p>Loading photos...</p>";
+    fetch(`https://api.unsplash.com/search/photos?query=${destination}&per_page=6&client_id=${UNSPLASH_ACCESS_KEY}`)
+    .then(res=>res.json())
+    .then(data=>{
+      photoGallery.innerHTML = "";
+      if(data.results.length > 0) {
+        data.results.forEach((photo,i)=>{
+          const img = document.createElement("img");
+          img.src = photo.urls.small;
+          img.alt = destination;
+          photoGallery.appendChild(img);
+          setTimeout(()=>{ img.classList.add('visible'); }, 320+i*130);
+        });
       } else {
-        alert("Please enter a city or country!");
+        photoGallery.innerHTML = "<p>No photos found.</p>";
       }
+    })
+    .catch(()=>{
+      photoGallery.innerHTML = "<p>Error fetching photos.</p>";
     });
-    // Photos
-    function fetchPhotos(destination){
-      photoGallery.innerHTML="<p>Loading photos...</p>";
-      fetch(https://api.unsplash.com/search/photos?query=${destination}&per_page=6&client_id=${UNSPLASH_ACCESS_KEY})
-      .then(res=>res.json())
-      .then(data=>{
-        photoGallery.innerHTML="";
-        if(data.results.length>0){
-          data.results.forEach((photo,i)=>{
-            const img=document.createElement("img");
-            img.src=photo.urls.small;
-            img.alt=destination;
-            photoGallery.appendChild(img);
-            setTimeout(()=>{img.style.opacity=1;},320+i*120);
-          });
-        } else {
-          photoGallery.innerHTML="<p>No photos found.</p>";
-        }
-      })
-      .catch(()=>{
-        photoGallery.innerHTML="<p>Error fetching photos.</p>";
-      });
-    }
-    // Weather
-    function fetchWeather(destination){
-      weatherInfo.innerHTML="<p>Loading weather...</p>";
-      fetch(https://api.openweathermap.org/data/2.5/weather?q=${destination}&appid=${WEATHER_API_KEY}&units=metric)
-      .then(res=>res.json())
-      .then(data=>{
-        if(data.cod===200){
-          gsap.to("#weatherInfo",{opacity:0,duration:0.5,onComplete:()=>{
-            weatherInfo.innerHTML=`
-              <h3>${data.name}, ${data.sys.country}</h3>
-              <p>🌡 Temperature: ${data.main.temp} °C</p>
-              <p>☁ Condition: ${data.weather[0].description}</p>
-              <p>💧 Humidity: ${data.main.humidity}%</p>
-              <p>🌬 Wind Speed: ${data.wind.speed} m/s</p>
-            `;
-            gsap.to("#weatherInfo",{opacity:1,duration:0.7});
-          }});
-        } else {
-          weatherInfo.innerHTML="<p>Weather data not found.</p>";
-        }
-      })
-      .catch(()=>{
-        weatherInfo.innerHTML="<p>Error fetching weather.</p>";
-      });
-    }
-  </script>
+  }
+  function fetchWeather(destination) {
+    weatherInfo.innerHTML = "<p>Loading weather...</p>";
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${destination}&appid=${WEATHER_API_KEY}&units=metric`)
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.cod === 200) {
+        gsap.to("#weatherInfo", {opacity: 0, duration:0.5, onComplete: ()=>{
+          weatherInfo.innerHTML = `
+            <h3>${data.name}, ${data.sys.country}</h3>
+            <p>🌡 Temperature: ${data.main.temp} °C</p>
+            <p>☁ Condition: ${data.weather[0].description}</p>
+            <p>💧 Humidity: ${data.main.humidity}%</p>
+            <p>🌬 Wind Speed: ${data.wind.speed} m/s</p>
+          `;
+          gsap.to("#weatherInfo", {opacity: 1, duration: 0.7});
+        }});
+      } else {
+        weatherInfo.innerHTML = "<p>Weather data not found.</p>";
+      }
+    })
+    .catch(()=>{
+      weatherInfo.innerHTML = "<p>Error fetching weather.</p>";
+    });
+  }
+</script>
 </body>
 </html> 
